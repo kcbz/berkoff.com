@@ -1,0 +1,68 @@
+DNS SNAPSHOT — berkoff.com
+Captured 2026-09-30 from live DNS. Registrar/DNS: Network Solutions (ns51/ns52.worldnic.com)
+Domain created 1996-08-24, expires 2030-08-23, lock: clientTransferProhibited
+
+================================================================
+REAL RECORDS — these must all exist in Cloudflare BEFORE the
+nameservers are switched. Everything else in the zone is a wildcard.
+================================================================
+
+TYPE   NAME           VALUE                                    NOTE
+----   ----           -----                                    ----
+A      @              54.67.97.108                             old AWS site — REPLACE with Pages IPs
+MX 10  @              mx001.netsol.xion.oxcs.net               EMAIL — do not lose
+MX 10  @              mx002.netsol.xion.oxcs.net               EMAIL — do not lose
+MX 10  @              mx003.netsol.xion.oxcs.net               EMAIL — do not lose
+MX 10  @              mx004.netsol.xion.oxcs.net               EMAIL — do not lose
+TXT    @              v=spf1 include:spf.cloudus.oxcs.net ~all  EMAIL (SPF) — do not lose
+CNAME  mail           mail.berkoff.com.netsolmail.net          webmail / client config
+CNAME  smtp           smtp.berkoff.com.netsolmail.net          outgoing mail
+CNAME  imap           imap.berkoff.com.netsolmail.net          incoming mail
+CNAME  pop            pop.berkoff.com.netsolmail.net           incoming mail
+CNAME  autodiscover   autodiscover.hostingplatform.com         Outlook auto-config
+*      *              208.91.197.27                            NetSol parking wildcard
+
+WILDCARD NOTE
+There is a wildcard *.berkoff.com -> 208.91.197.27 (Network Solutions parking).
+www, webmail, ftp, blog, m, cpanel and _dmarc are NOT configured records — they
+are all just the wildcard answering. That is why www.berkoff.com currently
+returns "Error. Page cannot be displayed." Do not recreate them individually.
+
+================================================================
+TARGET STATE (GitHub Pages + email untouched)
+================================================================
+
+A      @              185.199.108.153     \
+A      @              185.199.109.153      |  GitHub Pages
+A      @              185.199.110.153      |  (replaces 54.67.97.108)
+A      @              185.199.111.153     /
+CNAME  www            <username>.github.io    fixes the broken www
+  ...all MX, SPF and mail CNAMEs above carried over UNCHANGED...
+  drop the parking wildcard
+
+================================================================
+GAPS WORTH FIXING DURING THE MOVE
+================================================================
+- No DMARC record exists. Once on Cloudflare, add:
+    TXT  _dmarc  "v=DMARC1; p=none; rua=mailto:Bruce@Berkoff.com"
+  Start at p=none (monitor only), tighten to p=quarantine later.
+- No DKIM selector found. Network Solutions / Open-Xchange may support it —
+  worth asking them, since SPF alone is weak deliverability.
+- www is broken today and has been for some time.
+
+================================================================
+ORDER OF OPERATIONS (lowest risk)
+================================================================
+1. Publish to GitHub Pages, verify on <username>.github.io. No DNS change.
+2. Add berkoff.com to Cloudflare. Let it scan, then MANUALLY verify every
+   record above is present — Cloudflare's scanner regularly misses MX.
+3. Set Cloudflare DNS records to the TARGET STATE. Proxy OFF (grey cloud)
+   for the Pages records while validating.
+4. Change nameservers at Network Solutions to the two Cloudflare ones.
+   This is the moment email could break — hence step 2's manual check.
+5. Confirm mail still flows (send a test to Bruce@Berkoff.com) and the site
+   resolves. Leave the AWS box at 54.67.97.108 running for ~1 week.
+6. Only then transfer the registration itself to Cloudflare: unlock the
+   domain at NetSol, get the EPP/auth code, start the transfer (~5 days).
+   Nameservers are already Cloudflare's, so the site never moves again.
+7. After a stable week, shut down the AWS instance (someone is paying for it).
