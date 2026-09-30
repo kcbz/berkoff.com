@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bruce I. Berkoff — Marketing, Alliances &amp; Innovation in Deep Technology</title>
+<meta name="description" content="Bruce I. Berkoff — technology executive. Former EVP &amp; CMO, LG Display. Five public company boards. Go-to-market, pricing and partnerships for hard technology.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;450;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   TOKENS
+   Two families, strict roles:
+     Newsreader (serif)  -> display headings ONLY. Never body.
+     IBM Plex Sans       -> everything else, incl. data/labels.
+   One accent, used sparingly: rules, labels, links, metrics.
+   ============================================================ */
+:root{
+  color-scheme: light;
+
+  --bg:        #FAF9F7;
+  --surface:   #FFFFFF;
+  --surface-2: #F3F1ED;
+  --ink:       #17191C;
+  --ink-2:     #454A52;
+  --ink-3:     #70767F;
+  --line:      #E3E0DA;
+  --line-2:    #D3CFC7;
+  --accent:    #0E6F70;
+  --accent-2:  #0B5859;
+  --shadow:    0 1px 2px rgba(20,22,26,.04), 0 8px 24px -12px rgba(20,22,26,.14);
+
+  --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+
+  --measure: 68ch;
+  --gutter: clamp(20px, 5vw, 64px);
+  --maxw: 1180px;
+}
+
+/* dark by system preference, unless explicitly set to light */
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:        #0D0F12;
+    --surface:   #14171B;
+    --surface-2: #1B1F25;
+    --ink:       #EDEEF0;
+    --ink-2:     #B5BBC4;
+    --ink-3:     #868D97;
+    --line:      #262B32;
+    --line-2:    #333A43;
+    --accent:    #43C9C0;
+    --accent-2:  #7FE0D8;
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  }
+}
+/* explicit dark toggle */
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:        #0D0F12;
+  --surface:   #14171B;
+  --surface-2: #1B1F25;
+  --ink:       #EDEEF0;
+  --ink-2:     #B5BBC4;
+  --ink-3:     #868D97;
+  --line:      #262B32;
+  --line-2:    #333A43;
+  --accent:    #43C9C0;
+  --accent-2:  #7FE0D8;
+  --shadow:    0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{transition:none !important; animation:none !important} }
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:17px;
+  line-height:1.6;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  font-feature-settings:"ss01","cv05";
+}
+img{max-width:100%; height:auto; display:block}
+[hidden]{display:none !important}
+a{color:inherit}
+
+h1,h2,h3{margin:0; font-weight:400; letter-spacing:-.012em}
+h1,h2{font-family:var(--font-display)}
+p{margin:0 0 1.1em}
+p:last-child{margin-bottom:0}
+
+.wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:var(--gutter)}
+
+/* small uppercase label — the "technical" register, done with the
+   sans + tracking instead of dragging in a third family */
+.label{
+  font-size:11.5px; font-weight:600; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--accent);
+  font-feature-settings:"tnum";
+}
+.label--mute{color:var(--ink-3)}
+
+.rule{height:1px; background:var(--line); border:0; margin:0}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter:saturate(1.4) blur(12px);
+  border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top, 0px);
+}
+.site-header__inner{
+  max-width:var(--maxw); margin-inline:auto; padding:14px var(--gutter);
+  display:flex; align-items:center; gap:20px;
+}
+.wordmark{
+  font-family:var(--font-display); font-size:19px; letter-spacing:-.01em;
+  text-decoration:none; white-space:nowrap; margin-right:auto;
+}
+.wordmark b{font-weight:600}
+.nav{display:flex; gap:26px; align-items:center}
+.nav a{
+  font-size:14.5px; color:var(--ink-2); text-decoration:none;
+  padding:4px 0; border-bottom:1px solid transparent; transition:color .15s, border-color .15s;
+}
+.nav a:hover{color:var(--ink); border-bottom-color:var(--accent)}
+@media (max-width: 860px){ .nav{display:none} }
+
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-sans); font-size:14.5px; font-weight:500;
+  padding:9px 18px; border-radius:2px; text-decoration:none; cursor:pointer;
+  border:1px solid var(--ink); background:var(--ink); color:var(--bg);
+  transition:opacity .15s, background .15s, color .15s;
+}
+.btn:hover{opacity:.86}
+.btn--ghost{background:transparent; color:var(--ink); border-color:var(--line-2)}
+.btn--ghost:hover{border-color:var(--ink); opacity:1}
+.btn--lg{font-size:16px; padding:13px 26px}
+
+.theme-toggle{
+  display:grid; place-items:center; width:34px; height:34px;
+  border:1px solid var(--line-2); border-radius:2px;
+  background:transparent; color:var(--ink-2); cursor:pointer; flex:none;
+  transition:color .15s, border-color .15s;
+}
+.theme-toggle:hover{color:var(--ink); border-color:var(--ink)}
+.theme-toggle svg{width:16px; height:16px}
+:root:not([data-theme="dark"]) .icon-sun{display:none}
+:root[data-theme="dark"] .icon-moon{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]) .icon-moon{display:none}
+  :root:not([data-theme="light"]) .icon-sun{display:block}
+  :root[data-theme="light"] .icon-sun{display:none}
+  :root[data-theme="light"] .icon-moon{display:block}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+/* padding-block, NOT the shorthand — the shorthand would zero out the
+   horizontal gutter .wrap sets, which only shows up at phone width */
+.hero{padding-block:clamp(56px, 11vw, 120px) clamp(40px, 6vw, 64px)}
+.hero__eyebrow{margin-bottom:22px}
+.hero h1{
+  font-size:clamp(42px, 7.4vw, 82px);
+  line-height:1.02; letter-spacing:-.028em; font-weight:500;
+  margin-bottom:26px;
+}
+.hero__lede{
+  font-size:clamp(19px, 2.1vw, 23px); line-height:1.48;
+  color:var(--ink-2); max-width:36ch; font-weight:400;
+  margin-bottom:38px;
+}
+.hero__lede strong{color:var(--ink); font-weight:500}
+.hero__cta{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:clamp(48px, 7vw, 76px)}
+
+/* metrics */
+.metrics{
+  display:grid; grid-template-columns:repeat(3, minmax(0,1fr));
+  gap:clamp(20px, 4vw, 48px);
+  border-top:1px solid var(--line); padding-top:28px;
+}
+@media (max-width:640px){ .metrics{grid-template-columns:1fr; gap:22px} }
+.metric__value{
+  font-family:var(--font-display); font-size:clamp(34px, 4.6vw, 48px);
+  line-height:1; font-weight:500; letter-spacing:-.02em;
+  font-feature-settings:"tnum"; margin-bottom:10px;
+}
+.metric__label{font-size:14px; color:var(--ink-3); line-height:1.35}
+
+/* ============================================================
+   CREDENTIAL WALL
+   Typographic wordmarks, uniform optical weight. Swap for real
+   monochrome SVGs when you have them — see notes in README.
+   ============================================================ */
+.creds{
+  border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  padding:26px 0;
+}
+.creds__inner{display:grid; gap:14px}
+.creds__list{
+  display:flex; flex-wrap:wrap; align-items:center;
+  gap:10px clamp(20px, 3.4vw, 42px);
+}
+.creds__lead{font-size:12px; color:var(--ink-3); letter-spacing:.1em; text-transform:uppercase; font-weight:500}
+.creds__item{
+  font-size:13px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-2); white-space:nowrap;
+}
+
+
+/* ---------- logo chips ----------
+   Real logos, uniform optical height, on a white chip so they stay
+   legible in both themes. Three of them (Applied Materials, LightSense,
+   SkyDeck) carry white ink and keep their own dark plate. */
+.logo{
+  background:#fff; border-radius:3px;
+  display:grid; place-items:center; padding:8px 12px;
+  width:150px; height:58px; flex:none; overflow:hidden;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.07);
+}
+.logo img{max-width:100%; max-height:100%; width:auto; object-fit:contain}
+.logo--sm{width:134px; height:50px; padding:7px 10px}
+.logo--edu{width:172px; height:58px; margin-bottom:14px}
+@media (max-width:720px){ .logo--sm{width:120px; height:44px} }
+
+/* even, gap-free logo wall instead of a ragged flex wrap */
+.creds__list{
+  display:grid; gap:12px;
+  grid-template-columns:repeat(auto-fit, minmax(134px, 1fr));
+}
+.creds__list .logo{width:100%}
+
+/* ============================================================
+   SECTIONS
+   ============================================================ */
+.section{padding:clamp(64px, 9vw, 116px) 0}
+.section--alt{background:var(--surface-2); border-block:1px solid var(--line)}
+.section__head{margin-bottom:clamp(36px, 5vw, 56px); max-width:var(--measure)}
+.section__head .label{display:block; margin-bottom:16px}
+.section h2{
+  font-size:clamp(30px, 4.2vw, 46px); line-height:1.1;
+  letter-spacing:-.024em; font-weight:500;
+}
+.section__sub{margin-top:16px; color:var(--ink-2); font-size:17.5px; max-width:60ch}
+
+/* ---------- About ---------- */
+.about{display:grid; grid-template-columns:1.15fr .85fr; gap:clamp(32px, 5vw, 72px); align-items:start}
+@media (max-width:900px){ .about{grid-template-columns:1fr} }
+.about__body{max-width:var(--measure); color:var(--ink-2)}
+.about__body p{font-size:17.5px}
+.about__body strong{color:var(--ink); font-weight:500}
+
+.portrait{margin:0}
+.portrait img{
+  width:100%; max-width:260px; border-radius:2px;
+  border:1px solid var(--line); background:var(--surface);
+}
+.portrait figcaption{margin-top:12px; font-size:13px; color:var(--ink-3); max-width:260px}
+
+/* the NYSE photo — the single strongest proof asset on the site */
+.proof{margin:clamp(24px,3vw,36px) 0 0; grid-column:1 / -1}
+.proof img{width:100%; aspect-ratio:2 / 1; object-fit:cover; object-position:center 42%;
+            border-radius:2px; border:1px solid var(--line)}
+.proof figcaption{
+  margin-top:14px; font-size:14px; color:var(--ink-3);
+  display:flex; gap:10px; flex-wrap:wrap; align-items:baseline;
+}
+.proof figcaption b{color:var(--ink-2); font-weight:500}
+
+/* ---------- Competencies ---------- */
+.comp{
+  margin-top:clamp(32px,4vw,44px);
+  display:grid; grid-template-columns:repeat(2, minmax(0,1fr));
+  gap:0 clamp(24px,4vw,56px);
+  border-top:1px solid var(--line);
+}
+@media (max-width:640px){ .comp{grid-template-columns:1fr} }
+.comp div{
+  padding:15px 0; border-bottom:1px solid var(--line);
+  font-size:16px; color:var(--ink-2);
+  display:flex; gap:14px; align-items:baseline;
+}
+.comp div span{
+  font-size:11.5px; font-weight:600; color:var(--accent);
+  font-feature-settings:"tnum"; flex:none; letter-spacing:.04em;
+}
+
+/* ---------- Experience timeline ---------- */
+.roles{border-top:1px solid var(--line)}
+.roles__group{
+  font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--accent); padding:30px 0 14px; border-bottom:1px solid var(--line);
+}
+.roles__group:first-child{padding-top:18px}
+.role{
+  display:grid; grid-template-columns:150px 1fr;
+  gap:clamp(16px,3vw,40px);
+  padding:clamp(22px,3vw,32px) 0;
+  border-bottom:1px solid var(--line);
+  align-items:baseline;
+}
+@media (max-width:720px){ .role{grid-template-columns:1fr; gap:8px} }
+.role__meta{display:grid; gap:11px; justify-items:start}
+.role__when{
+  font-size:13.5px; color:var(--ink-3); font-feature-settings:"tnum";
+  letter-spacing:.02em; padding-top:.35em;
+}
+@media (max-width:720px){ .role__meta{display:grid; gap:11px; justify-items:start}
+.role__when{padding-top:0} }
+.role__org{
+  font-family:var(--font-display); font-size:clamp(21px,2.5vw,27px);
+  font-weight:500; letter-spacing:-.018em; line-height:1.2; margin-bottom:6px;
+}
+.role__title{font-size:16.5px; color:var(--ink-2)}
+.role__note{margin-top:10px; font-size:15.5px; color:var(--ink-3); max-width:60ch}
+
+/* anchor roles carry visual weight; the rest compress */
+.role--anchor .role__org{font-size:clamp(25px,3.2vw,36px)}
+.role--anchor .role__title{color:var(--ink); font-size:17.5px}
+
+/* ---------- Data block: boards + education ---------- */
+.data{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:clamp(36px,6vw,80px)}
+@media (max-width:860px){ .data{grid-template-columns:1fr} }
+.data h3{
+  font-family:var(--font-sans); font-size:12px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
+  padding-bottom:14px; border-bottom:1px solid var(--line); margin-bottom:4px;
+}
+.entry{padding:16px 0; border-bottom:1px solid var(--line)}
+.entry__k{font-size:16.5px; color:var(--ink); font-weight:500; margin-bottom:3px}
+.entry__v{font-size:15px; color:var(--ink-3)}
+.ticker{
+  font-size:12px; font-weight:600; letter-spacing:.08em;
+  color:var(--accent); font-feature-settings:"tnum";
+}
+
+/* ---------- Contact ---------- */
+.contact{text-align:left}
+.contact h2{font-size:clamp(32px,5.4vw,56px); max-width:18ch; margin-bottom:24px}
+.contact__lede{font-size:18.5px; color:var(--ink-2); max-width:52ch; margin-bottom:40px}
+.contact__lines{display:grid; gap:2px; border-top:1px solid var(--line)}
+.contact__line{
+  display:flex; align-items:baseline; gap:20px; flex-wrap:wrap;
+  padding:20px 0; border-bottom:1px solid var(--line);
+  text-decoration:none; transition:color .15s;
+}
+.contact__line .label{flex:none; width:80px}
+.contact__line span:last-child{
+  font-family:var(--font-display); font-size:clamp(22px,3.4vw,32px);
+  font-weight:500; letter-spacing:-.018em; color:var(--ink);
+}
+a.contact__line:hover span:last-child{color:var(--accent)}
+
+/* ---------- Footer ---------- */
+.site-footer{
+  border-top:1px solid var(--line); padding:32px 0;
+  padding-bottom:calc(32px + env(safe-area-inset-bottom, 0px));
+  font-size:13.5px; color:var(--ink-3);
+}
+.site-footer__inner{display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap}
+
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:1px}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="wordmark" href="#top">Bruce I. <b>Berkoff</b></a>
+    <nav class="nav">
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#boards">Boards &amp; Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle colour theme">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+    <a class="btn" href="#contact">Get in touch</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap">
+    <div class="hero__eyebrow label">Marketing · Alliances · Innovation</div>
+    <h1>Bruce I. Berkoff</h1>
+    <p class="hero__lede">
+      A career spent turning hard technology into markets — <strong>displays, sensors,
+      microLED, solar and MedTech</strong>. Former EVP &amp; CMO, LG Display.
+    </p>
+    <div class="hero__cta">
+      <a class="btn btn--lg" href="#contact">Get in touch</a>
+      <!-- TODO: point at the real PDF -->
+      <a class="btn btn--ghost btn--lg" href="assets/Berkoff_CV.pdf">Download CV</a>
+    </div>
+
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric__value">$3B+</div>
+        <div class="metric__label">Helped large companies raise</div>
+      </div>
+      <div class="metric">
+        <div class="metric__value">$65M+</div>
+        <div class="metric__label">Helped smaller and early-stage companies raise</div>
+      </div>
+      <div class="metric">
+        <div class="metric__value">5</div>
+        <div class="metric__label">Public company boards, plus many private</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CREDENTIAL WALL ============ -->
+  <div class="creds">
+    <div class="creds__inner wrap">
+      <span class="creds__lead">Operating &amp; board roles at</span>
+      <div class="creds__list">
+        <span class="logo logo--sm"><img src="assets/logos/lgdisplay.png" alt="LG Display" loading="lazy"></span>
+        <span class="logo logo--sm"><img src="assets/logos/appliedmaterials.png" alt="Applied Materials" loading="lazy"></span>
+        <span class="logo logo--sm"><img src="assets/logos/nanosys.png" alt="Nanosys" loading="lazy"></span>
+        <span class="logo logo--sm"><img src="assets/logos/infocus.png" alt="InFocus" loading="lazy"></span>
+        <span class="logo logo--sm"><img src="assets/logos/LCDTV.png" alt="LCD TV Association" loading="lazy"></span>
+        <span class="logo logo--sm"><img src="assets/logos/skydeck.png" alt="Berkeley SkyDeck" loading="lazy"></span>
+        <span class="logo logo--sm"><img src="assets/logos/lightsense.png" alt="LightSense Technology" loading="lazy"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="label">About</span>
+        <h2>A physicist who spent his career on the commercial side of hard technology.</h2>
+      </div>
+
+      <div class="about">
+        <div class="about__body">
+          <p>
+            Bruce Berkoff has held <strong>CEO, CMO, CRO and CSO roles</strong> across the
+            technology industry — from capital equipment to displays, sensors to microLED,
+            solar and GreenTech to MedTech. He was <strong>EVP &amp; CMO at LG Display</strong>,
+            and later a member of its board; CMO/CSO for the EDS division at
+            <strong>Applied Materials</strong>; and acting CRO at <strong>Nanosys</strong>.
+          </p>
+          <p>
+            His work is the commercial layer on top of deep science: strategic road mapping,
+            pricing, go-to-market execution and monetization, with extensive experience in
+            IPOs, M&amp;A and joint ventures.
+          </p>
+          <p>
+            He currently chairs the LCD TV Association, advises and mentors at
+            <strong>Berkeley SkyDeck</strong>, and works with startups and large companies on
+            electronic materials, strategy, GTM and pricing. His present focus is saving lives
+            and money through new sensor and MedTech approaches — advanced materials paired
+            with AI/ML analysis.
+          </p>
+          <p>
+            He holds degrees from <strong>Princeton</strong> and <strong>UC Berkeley</strong> in
+            physics and biophysics, has lived in three countries and six states, and works best
+            at the intersection between disciplines and cultures.
+          </p>
+        </div>
+
+        <figure class="portrait">
+          <img src="assets/BruceBerkoff.jpeg" alt="Portrait of Bruce I. Berkoff" width="407" height="407">
+          <figcaption>Bruce I. Berkoff</figcaption>
+        </figure>
+
+        <!-- The proof asset. Authentic, specific, unfakeable. Give it room. -->
+        <figure class="proof">
+          <img src="assets/Bruce_IPO.jpeg" alt="Executives ring the opening bell at the New York Stock Exchange for the LG.Philips LCD listing" width="2802" height="1570">
+          <figcaption>
+            <b>LG.Philips LCD lists on the NYSE — 26 July 2004.</b>
+            <!-- TODO: confirm date/details with Bruce; the bell board in the photo reads JULY 26. -->
+            <span>Berkoff served as EVP &amp; Chief Marketing Officer through the listing.</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="comp">
+        <div><span>01</span> Marketing &amp; revenue growth at CMO / CSO / CRO level</div>
+        <div><span>02</span> Strategy, product design &amp; pricing</div>
+        <div><span>03</span> Business development &amp; sales</div>
+        <div><span>04</span> Technology &amp; innovation management</div>
+        <div><span>05</span> Strategic partnerships &amp; GTM execution</div>
+        <div><span>06</span> Forecasting, benchmarking &amp; competitive analysis</div>
+        <div><span>07</span> Scaling through global alliances</div>
+        <div><span>08</span> Cost optimization &amp; product-market fit</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="section section--alt" id="experience">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="label">Experience</span>
+        <h2>Selected roles</h2>
+        <p class="section__sub">
+          Most recent first. The roles that defined the career are set larger.
+        </p>
+      </div>
+
+      <div class="roles">
+
+        <div class="roles__group">Current</div>
+
+        <article class="role">
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/lightsense.png" alt="LightSense Technology" loading="lazy"></span>
+            <span class="role__when">2019 – Present</span>
+          </div>
+          <div>
+            <div class="role__org">LightSense Technology</div>
+            <div class="role__title">Chief Marketing Officer</div>
+          </div>
+        </article>
+
+        <article class="role">
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/skydeck.png" alt="Berkeley SkyDeck" loading="lazy"></span>
+            <span class="role__when">2019 – Present</span>
+          </div>
+          <div>
+            <div class="role__org">Berkeley SkyDeck</div>
+            <div class="role__title">SkyAdvisor, Key Advisor &amp; Mentor</div>
+          </div>
+        </article>
+
+        <article class="role role--anchor">
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/LCDTV.png" alt="LCD TV Association" loading="lazy"></span>
+            <span class="role__when">2007 – Present</span>
+          </div>
+          <div>
+            <div class="role__org">LCD TV Association</div>
+            <div class="role__title">Chairman, Founder &amp; Chief Marketing Officer</div>
+          </div>
+        </article>
+
+        <article class="role">
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/berkoff.png" alt="Berkoff &amp; Associates, LLC" loading="lazy"></span>
+            <span class="role__when">2007 – Present</span>
+          </div>
+          <div>
+            <div class="role__org">Berkoff &amp; Associates, LLC</div>
+            <div class="role__title">Founder &amp; President</div>
+          </div>
+        </article>
+
+        <div class="roles__group">Prior</div>
+
+        <article class="role role--anchor">
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/nanosys.png" alt="Nanosys" loading="lazy"></span>
+            <span class="role__when">2013 – 2023</span>
+          </div>
+          <div>
+            <div class="role__org">Nanosys</div>
+            <div class="role__title">Board Member; Chief Revenue Officer, 2022 – 2023</div>
+          </div>
+        </article>
+
+        <article class="role">
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/infocus.png" alt="InFocus Corporation" loading="lazy"></span>
+            <span class="role__when">2016 – 2018</span>
+          </div>
+          <div>
+            <div class="role__org">InFocus Corporation</div>
+            <div class="role__title">Vice President, Product Line Management</div>
+          </div>
+        </article>
+
+        <article class="role">
+        <!-- TODO: dates. Sequence per his LightSense bio: LG -> Ascent Solar -> Applied Materials -> CBrite -> InFocus. -->
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/cbrite.png" alt="CBrite" loading="lazy"></span>
+            <span class="role__when">—</span>
+          </div>
+          <div>
+            <div class="role__org">CBrite</div>
+            <div class="role__title">Chief Marketing Officer</div>
+          </div>
+        </article>
+
+        <article class="role role--anchor">
+        <!-- TODO: dates. Followed Ascent Solar. -->
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/appliedmaterials.png" alt="Applied Materials" loading="lazy"></span>
+            <span class="role__when">—</span>
+          </div>
+          <div>
+            <div class="role__org">Applied Materials</div>
+            <div class="role__title">Chief Marketing Officer &amp; Chief Strategy Officer, EDS Division</div>
+          </div>
+        </article>
+
+        <article class="role">
+        <!-- TODO: dates. Followed LG.Philips LCD. -->
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/ascent.png" alt="Ascent Solar" loading="lazy"></span>
+            <span class="role__when">—</span>
+          </div>
+          <div>
+            <div class="role__org">Ascent Solar</div>
+            <div class="role__title">Chief Marketing Officer</div>
+          </div>
+        </article>
+
+        <article class="role role--anchor">
+        <!-- TODO: 1999-2006 is from Crunchbase/MarketScreener, NOT from Bruce. Confirm before publishing. -->
+          <div class="role__meta">
+            <span class="logo logo--sm"><img src="assets/logos/lgdisplay.png" alt="LG Display" loading="lazy"></span>
+            <span class="role__when">1999 – 2006</span>
+          </div>
+          <div>
+            <div class="role__org">LG Display</div>
+            <div class="role__title">Executive Vice President &amp; Chief Marketing Officer; later Board Member</div>
+            <p class="role__note">LG.Philips LCD at the time. Public board seat (NYSE: LPL) followed the operating role.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BOARDS + EDUCATION ============ -->
+  <section class="section" id="boards">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="label">Governance &amp; Education</span>
+        <h2>Boards, advisory roles and training</h2>
+      </div>
+
+      <div class="data">
+        <div>
+          <h3>Public company boards</h3>
+          <div class="entry"><div class="entry__k">LG Display</div><div class="entry__v"><span class="ticker">NYSE: LPL</span></div></div>
+          <div class="entry"><div class="entry__k">InFocus</div><div class="entry__v"><span class="ticker">INFS</span></div></div>
+          <div class="entry"><div class="entry__k">Unipixel</div><div class="entry__v"><span class="ticker">UNXL</span></div></div>
+          <div class="entry"><div class="entry__k">Tvia</div><div class="entry__v"><span class="ticker">TVIA</span></div></div>
+          <div class="entry"><div class="entry__k">Syntax-Brillian</div><div class="entry__v"><span class="ticker">BRLC</span></div></div>
+
+          <h3 style="margin-top:44px">Private company boards</h3>
+          <div class="entry"><div class="entry__k">Nanosys · CBrite · LightSense Technology</div><div class="entry__v">VueReal · Mattrix Technology · and others</div></div>
+          <div class="entry"><div class="entry__k">Boards of Advisors</div><div class="entry__v">Various start-ups via angel groups and incubators</div></div>
+        </div>
+
+        <div>
+          <h3>Education</h3>
+          <div class="entry">
+            <span class="logo logo--edu"><img src="assets/logos/berkeley.png" alt="University of California, Berkeley" loading="lazy"></span>
+            <div class="entry__k">University of California, Berkeley</div>
+            <div class="entry__v">Graduate study — Biophysics · 3.7 GPA</div>
+          </div>
+          <div class="entry">
+            <span class="logo logo--edu"><img src="assets/logos/princeton.png" alt="Princeton University" loading="lazy"></span>
+            <div class="entry__k">Princeton University</div>
+            <div class="entry__v">Physics</div>
+            <!-- TODO: confirm degree + field wording with Bruce. -->
+          </div>
+
+          <h3 style="margin-top:44px">Executive development</h3>
+          <div class="entry">
+            <span class="logo logo--edu"><img src="assets/logos/wharton.png" alt="The Wharton School" loading="lazy"></span>
+            <div class="entry__k">The Wharton School</div>
+            <div class="entry__v">Executive education</div>
+          </div>
+          <div class="entry">
+            <span class="logo logo--edu"><img src="assets/logos/philips_edu.png" alt="Philips" loading="lazy"></span>
+            <div class="entry__k">Philips</div>
+            <div class="entry__v">Executive leadership programme</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="section section--alt" id="contact">
+    <div class="wrap contact">
+      <span class="label">Contact</span>
+      <h2 style="margin-top:16px">Available for board, advisory and operating conversations.</h2>
+      <p class="contact__lede">
+        Most useful on go-to-market strategy, pricing, partnerships and competitive
+        positioning in deep technology. Direct contact is fastest.
+      </p>
+
+      <div class="contact__lines">
+        <a class="contact__line" href="mailto:Bruce@Berkoff.com">
+          <span class="label">Email</span>
+          <span>Bruce@Berkoff.com</span>
+        </a>
+        <a class="contact__line" href="tel:+12156662633">
+          <span class="label">Phone</span>
+          <span>+1 215 666 2633</span>
+        </a>
+        <!-- TODO: add LinkedIn URL -->
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <span>© <span id="yr">2026</span> Bruce I. Berkoff</span>
+    <span>Marketing, alliances &amp; innovation in deep technology</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var btn  = document.getElementById('themeToggle');
+
+  function stored(){ try { return localStorage.getItem('theme'); } catch(e){ return null; } }
+  function save(v){ try { localStorage.setItem('theme', v); } catch(e){} }
+
+  var saved = stored();
+  if (saved === 'light' || saved === 'dark') root.setAttribute('data-theme', saved);
+
+  btn.addEventListener('click', function(){
+    var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var current = root.getAttribute('data-theme') || (systemDark ? 'dark' : 'light');
+    var next = current === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    save(next);
+  });
+
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
