@@ -3,7 +3,7 @@
 **Plan: DNS stays at Network Solutions.** Only the website records change. Every email
 record is left exactly as it is, so his email cannot break.
 
-Live staging: https://kcbz.github.io/berkoff.com/
+Default Pages URL (redirects after custom domain setup): https://kcbz.github.io/berkoff.com/
 Repo: https://github.com/kcbz/berkoff.com
 
 ---
@@ -27,14 +27,14 @@ Delete the old `54.67.97.108` entry. GitHub needs all four for redundancy.
 | `www` | CNAME | `kcbz.github.io` |
 
 Note the trailing dot if the form requires one: `kcbz.github.io.`
-There is no real `www` record today — it is being answered by the wildcard below,
-which is why www.berkoff.com currently shows an error page.
+Delete the existing `www` A record before adding the CNAME. A CNAME cannot coexist
+with an A record at the same name. Do not change the email CNAME records.
 
-### 3. Optional but recommended — remove the wildcard
+### 3. Leave the wildcard for now
 
 There is a `*` (wildcard) record pointing at `208.91.197.27`, a Network Solutions
-parking page. It makes every typo'd subdomain return a confusing error screen.
-Deleting it is safe. An explicit `www` CNAME overrides it either way.
+parking page. It is not required for Pages; the explicit `www` CNAME overrides it.
+Review whether other subdomains rely on it before deciding whether to remove it.
 
 ---
 
@@ -58,18 +58,19 @@ If the Network Solutions interface ever offers to "reset to defaults" or
 
 ---
 
-## Then, on this side
+## GitHub setup and cutover order
 
-Once the A records resolve to GitHub (check with `dig +short berkoff.com`):
+1. In repo Settings -> Pages -> Build and deployment, select **GitHub Actions**.
+2. When ready to publish, commit and push the prepared workflow to `main`. Confirm
+   the deployment succeeds in Actions before cutting over DNS.
+3. Set Settings -> Pages -> Custom domain to `berkoff.com` and save.
+4. Apply the website DNS changes above at Network Solutions. A 15-minute TTL for
+   the new records is suitable; existing cached records can take longer to expire.
+5. Wait for GitHub's DNS check and TLS certificate, then enable **Enforce HTTPS**.
 
-    mv CNAME.pending CNAME
-    git add -f CNAME
-    git commit -m "Claim berkoff.com"
-    git push
-
-Then repo Settings -> Pages -> Custom domain -> `berkoff.com` -> Save.
-Wait for the TLS certificate (usually minutes, up to 24h), then tick
-**Enforce HTTPS**.
+The Actions workflow publishes `_site/`. Custom domains for Actions deployments
+are configured in Pages settings, not through a `CNAME` file. Do not rename or
+commit the obsolete local `CNAME.pending` file. No DNS changes are automated.
 
 ---
 

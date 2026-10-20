@@ -1,35 +1,55 @@
 # berkoff.com
 
-Personal site for Bruce I. Berkoff. Single static page, no build step.
+Personal site for Bruce I. Berkoff. Plain HTML, CSS and JavaScript; no framework,
+package manager, dependencies or compilation step.
 
-- `index.html` — the whole site (markup + CSS + the theme toggle)
-- `assets/` — photos and extracted company/university logos
-- `CNAME.pending` — the custom domain, held back until DNS cuts over (see below)
-- `NOTES.md` — design system, open content questions, asset provenance
+- `index.html` — the whole site, including CSS and the theme toggle
+- `assets/` — photos and company/university logos
+- `.github/workflows/deploy.yml` — GitHub Pages build and deployment
+- `NOTES.md` — design notes and outstanding content questions
 
-## Local preview
+## Local production build and preview
 
-Open `index.html` directly, or:
+From the repository root, assemble the same static output used by Actions:
 
-    python3 -m http.server 8000
+```sh
+mkdir -p _site
+cp index.html _site/
+cp -R assets _site/assets
+python3 -m http.server 8000 --directory _site
+```
+
+Start with an empty `_site/` directory when rebuilding to avoid stale assets.
+Open http://localhost:8000/. Output is `_site/` (gitignored). Only `index.html`
+and `assets/` are published; repository notes, DNS snapshots and unused source
+images are excluded. No environment variables or secrets enter the output.
 
 ## Deploy
 
-Pushing to `main` publishes via GitHub Pages. No build, no CI.
+Repository: https://github.com/kcbz/berkoff.com. Default branch: `main`.
+The workflow builds and deploys on pushes to `main`, and supports **Actions →
+Deploy website to GitHub Pages → Run workflow** on `main`.
 
-### Custom domain cutover
+Before pushing the workflow, open **Settings → Pages → Build and deployment**
+and select **GitHub Actions** as the source. After pushing, check the Actions run.
 
-The site is intentionally NOT claiming `berkoff.com` yet. A `CNAME` file makes Pages
-redirect the `github.io` URL to the custom domain, which would break staging while DNS
-still points at the old AWS host.
+For the custom domain, set **Settings → Pages → Custom domain** to `berkoff.com`
+and save. Configure the Network Solutions records described in `DNS-CUTOVER.md`,
+then enable **Enforce HTTPS** when available. The `www` CNAME target is
+`kcbz.github.io`, without a protocol or repository name.
 
-When DNS is ready (see `dns-snapshot-berkoff.com.txt`):
+The production site is served at `https://berkoff.com/`. Existing relative asset
+URLs and in-page anchor navigation work at the domain root without a framework
+base-path setting or a routing fallback. GitHub redirects `www.berkoff.com` to
+the apex domain when both DNS records are configured.
 
-    mv CNAME.pending CNAME && git add -f CNAME && git commit -m "Claim berkoff.com" && git push
+Actions deployments require the custom domain to be configured in Pages settings;
+a `CNAME` file is not required and does not configure it. The local, ignored
+`CNAME.pending` file is obsolete and need not be renamed or committed.
 
-Then in repo Settings -> Pages, set the custom domain and enable "Enforce HTTPS" once the
-certificate provisions.
+Known pre-existing content issue: the Download CV button references
+`assets/Berkoff_CV.pdf`, which has not been supplied. Add that file to fix the link.
+See `NOTES.md` for other editorial follow-ups.
 
-`_source-assets/` holds the unused original images pulled from the old site
-(~14MB of stock photography and the oversized logo JPEGs). It is gitignored —
-kept locally for reference, deliberately not shipped.
+`_source-assets/` contains unused original images kept locally for reference and
+is gitignored.
