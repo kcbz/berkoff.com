@@ -100,3 +100,40 @@ this is possible. Propagation is typically under an hour (the zone's TTL is
 - **DMARC.** The domain has SPF but no DMARC record at all. Add:
       TXT  _dmarc  "v=DMARC1; p=none; rua=mailto:Bruce@Berkoff.com"
   `p=none` only monitors and changes nothing about delivery.
+
+---
+
+# STATUS — 2026-10-23
+
+DNS cutover is **done**. `berkoff.com` is live on GitHub Pages. MX records were never
+touched, so email is unaffected.
+
+## Outstanding: www.berkoff.com shows a certificate warning
+
+GitHub's certificate currently covers `berkoff.com` only, not `www.berkoff.com`, so
+www serves GitHub's generic `*.github.io` cert -> `ERR_CERT_COMMON_NAME_INVALID`.
+
+Cause: the `*` wildcard record was deleted at Network Solutions, GitHub detected the
+DNS change and restarted its certificate provisioning (state: `dns_changed`). That
+process can take up to 24 hours. Separately, **Enforce HTTPS** was blocking Let's
+Encrypt's HTTP validation of the www hostname, so that has been turned off.
+
+## >>> MUST DO once the certificate covers www <<<
+
+**Enforce HTTPS is currently OFF.** `http://berkoff.com` does not redirect to HTTPS
+right now. Re-enable it as soon as the certificate includes www:
+
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F https_enforced=true
+
+Do not re-enable it before then — it is what wedged the certificate in the first place.
+
+## How to check
+
+    ./scripts/check-cert.sh
+
+If still stuck ~24h after the wildcard deletion, force a re-provision (causes a few
+minutes of downtime on berkoff.com):
+
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=''
+    sleep 90
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=berkoff.com
