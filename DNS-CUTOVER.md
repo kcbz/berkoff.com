@@ -87,10 +87,15 @@ Send a test email to Bruce@Berkoff.com afterwards and confirm it arrives.
 
 ## Rollback
 
-Put the single A record back to `54.67.97.108` and delete the `www` CNAME.
-The old AWS server should be left running for about a week after cutover so
-this is possible. Propagation is typically under an hour (the zone's TTL is
-7200s / 2 hours).
+GitHub Pages is the permanent host. There is no going back to the old AWS
+server (`54.67.97.108`) — it is not ours, it runs end-of-life PHP 8.0, and no
+DNS references it any more. Do not treat it as a fallback.
+
+Rolling back means reverting a bad deploy, not changing DNS:
+
+    git revert <bad-commit> && git push
+
+Pages rebuilds in under a minute. DNS never needs to be touched again.
 
 ## Optional hardening, once live
 
