@@ -103,37 +103,45 @@ this is possible. Propagation is typically under an hour (the zone's TTL is
 
 ---
 
-# STATUS — 2026-10-23
+# STATUS — RESOLVED 2026-10-23
 
-DNS cutover is **done**. `berkoff.com` is live on GitHub Pages. MX records were never
-touched, so email is unaffected.
+Cutover complete and working.
 
-## Outstanding: www.berkoff.com shows a certificate warning
+    http://berkoff.com       301 -> https://berkoff.com/
+    https://berkoff.com      200
+    http://www.berkoff.com   301 -> https://berkoff.com/
+    https://www.berkoff.com  301 -> https://berkoff.com/
 
-GitHub's certificate currently covers `berkoff.com` only, not `www.berkoff.com`, so
-www serves GitHub's generic `*.github.io` cert -> `ERR_CERT_COMMON_NAME_INVALID`.
+TLS certificate covers `berkoff.com` + `www.berkoff.com`. Enforce HTTPS is ON.
+MX records never touched; email unaffected throughout.
 
-Cause: the `*` wildcard record was deleted at Network Solutions, GitHub detected the
-DNS change and restarted its certificate provisioning (state: `dns_changed`). That
-process can take up to 24 hours. Separately, **Enforce HTTPS** was blocking Let's
-Encrypt's HTTP validation of the www hostname, so that has been turned off.
+## What the www certificate problem actually was
 
-## >>> MUST DO once the certificate covers www <<<
+`www.berkoff.com` threw ERR_CERT_COMMON_NAME_INVALID because GitHub's certificate
+covered the apex only. Two things kept it stuck:
 
-**Enforce HTTPS is currently OFF.** `http://berkoff.com` does not redirect to HTTPS
-right now. Re-enable it as soon as the certificate includes www:
+1. **Enforce HTTPS was on while the certificate was still pending.** It 301-redirected
+   Let's Encrypt's HTTP validation request for the www hostname to the apex, so the www
+   authorization could never succeed. The API also refuses to disable Enforce HTTPS while
+   a certificate is pending — a genuine deadlock. Re-asserting the custom domain
+   (`-F cname=berkoff.com` alone) cleared the flag without downtime.
+2. **Deleting the `*` wildcard at Network Solutions restarted GitHub's provisioning
+   clock**, which is why waiting 24h appeared not to help.
 
-    gh api -X PUT repos/kcbz/berkoff.com/pages -F https_enforced=true
+An earlier remove/re-add of the custom domain had been tried and failed, because Enforce
+HTTPS was still on at the time. With it off, remove/re-add worked immediately: the
+certificate request went from covering `berkoff.com` to covering both names, and issued
+within about a minute.
 
-Do not re-enable it before then — it is what wedged the certificate in the first place.
-
-## How to check
+## Routine check
 
     ./scripts/check-cert.sh
 
-If still stuck ~24h after the wildcard deletion, force a re-provision (causes a few
-minutes of downtime on berkoff.com):
+## If the certificate ever gets stuck again
 
-    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=''
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=berkoff.com   # clears a stuck enforce flag
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=''            # then remove
     sleep 90
-    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=berkoff.com
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=berkoff.com   # and re-add
+    # once it covers both names:
+    gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=berkoff.com -F https_enforced=true

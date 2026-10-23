@@ -23,10 +23,11 @@ printf "  https://berkoff.com       %s\n" "$(curl -s -o /dev/null -w '%{http_cod
 printf "  https://www.berkoff.com   %s\n" "$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 https://www.berkoff.com 2>/dev/null || echo 'CERT ERROR')"
 
 echo
-if [[ "$doms" == *"www.berkoff.com"* ]]; then
-  echo "DONE — www is on the certificate."
-  echo "NOW RE-ENABLE ENFORCE HTTPS:"
-  echo "  gh api -X PUT repos/kcbz/berkoff.com/pages -F https_enforced=true"
+if [[ "$doms" == *"www.berkoff.com"* && "$enf" == "true" ]]; then
+  echo "ALL GOOD — certificate covers apex + www, and Enforce HTTPS is on."
+elif [[ "$doms" == *"www.berkoff.com"* ]]; then
+  echo "Certificate covers www, but Enforce HTTPS is OFF. Turn it back on:"
+  echo "  gh api -X PUT repos/kcbz/berkoff.com/pages -F cname=berkoff.com -F https_enforced=true"
 else
   echo "Not yet. www is still missing from the certificate."
   echo "If this is still true 24h after the wildcard was deleted, force it:"
