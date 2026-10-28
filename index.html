@@ -36,6 +36,7 @@
   --font-display: "Newsreader", Georgia, "Times New Roman", serif;
   --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
 
+  --ctl-h: 38px;          /* shared height for header controls */
   --measure: 68ch;
   --gutter: clamp(20px, 5vw, 64px);
   --maxw: 1180px;
@@ -167,6 +168,14 @@ p:last-child{margin-bottom:0}
   transition:color .15s, border-color .15s, background .15s;
 }
 .theme__btn:hover{color:var(--ink); border-color:var(--ink)}
+/* the header CTA and the theme control must agree on height — an 8px
+   mismatch reads as a bug, not as hierarchy. Emphasis comes from the
+   solid fill instead. */
+.site-header .btn, .theme__btn{
+  height:var(--ctl-h); padding-block:0; align-items:center;
+}
+.site-header .btn{padding-inline:18px}
+.theme__btn{padding-inline:11px}
 .theme__btn[aria-expanded="true"]{color:var(--ink); border-color:var(--ink)}
 .theme__btn svg{width:14px; height:14px; flex:none}
 .theme__chev{
